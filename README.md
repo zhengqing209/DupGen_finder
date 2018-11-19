@@ -2,15 +2,6 @@
 
 The DupGen_finder was developed to identify different modes of duplicated gene pairs. [MCScanX](http://chibba.pgml.uga.edu/mcscan2/) algorithm was incorporated in this pipeline.
 
-<p align="center">
-<img src="https://github.com/LQHHHHH/DupGen_finder/blob/master/data/The%20flowchart%20of%20DupGen_finder%20pipeline.png"  height="500" width="300">
-<p align="center">
-
-<t align="center">
-  figure 1: The flowchart of DupGen_finder pipeline
-</t>
-
-
 | | |
 | --- | --- |
 | Authors | Xin Qiao ([Xin Qiao](https://github.com/qiao-xin)) |
@@ -19,7 +10,16 @@ The DupGen_finder was developed to identify different modes of duplicated gene p
 | | Andrew Paterson ([PGML](http://www.plantgenome.uga.edu)) |
 | Email   | <qiaoxinqx2011@126.com> |
 
-### Contents
+## The schematic diagram of DupGen_finder pipeline
+<p align="center">
+<img src="https://github.com/LQHHHHH/DupGen_finder/blob/master/data/The%20flowchart%20of%20DupGen_finder%20pipeline.png"  height="500" width="300">
+<p align="center">
+
+<t align="center">
+  figure 1: The flowchart of DupGen_finder pipeline
+</t>
+
+## Contents
 * [Dependencies](#dependencies)
 * [Installation](#installation)
 * [Preparing Data files](#preparing-data-files)
@@ -39,7 +39,7 @@ cd DupGen_finder
 make
 ```
 
-## Preparing Data files
+## Preparing input files
 
 Pre-computed BLAST results and gene location information (GFF format) are required for running DupGen_finder successfully.
 
@@ -51,7 +51,7 @@ Pre-computed BLAST results and gene location information (GFF format) are requir
 	- ```[target_species]_[outgroup_species].gff```, a gene position file for the target_species and outgroup_species, following a tab-delimited format.
 	- ```[target_species]_[outgroup_species].blast```, a blastp output file (-outfmt 6) between the target and outgroup species (cross-genome comparison).
 
-3. For example, assuming that you are going to classify gene duplication modes in *Arabidopsis thaliana* (abbr: Ath), using *Nelumbo nucifera* (abbr: Nnu) as outgroup, you need to prepare 4 input files: ```Ath.gff```,```Ath.blast```, ```Ath_Nnu.gff```, ```Ath_Nnu.blast```
+3. For example, assuming that you are going to classify gene duplication modes in *Arabidopsis thaliana* (Ath), using *Nelumbo nucifera* (Nnu) as outgroup, you need to prepare 4 input files: ```Ath.gff```,```Ath.blast```, ```Ath_Nnu.gff```, ```Ath_Nnu.blast```
 
 ```Ath.gff``` is in the following format (tab separated):
 ```
@@ -117,9 +117,16 @@ A typical command to identify different modes of duplicated gene pairs in a give
 ```bash
 $ perl DupGen_finder.pl -i data/ -t Ath -c Nnu -o results/
 ```
-Here, **DupGen_finder** attempts to identify the different modes of duplicated gene pairs in *A.thaliana* by using *N.nucifera* as outgroup. All required data files should be stored under this directory ```data/```. The output files will be stored under this directory ```results/```. Ath: *A.thaliana*, Nnu: *N.nucifera*.
+Here, **DupGen_finder** attempts to identify the different modes of duplicated gene pairs in *A.thaliana* by using *N.nucifera* as outgroup. All required data files should be stored under this directory ```data/```. The output files will be stored under this directory ```results/```. For more details please see below. Ath: *A.thaliana*, Nnu: *N.nucifera*.
 
 **Note**: We recommend that the "data_directory" or "output_directory" should be given a full path. For example, ```/home/the_path_to_your_data_directory/```
+
+### *GenDup_finder-unique*
+Moreover, to eliminate redundant duplicate genes among different modes, we provide a stricter version of **GenDup_finder** named **GenDup_finder-unique** by which each duplicate gene was assigned to a unique mode after all of the duplicated gene pairs were classified into different gene duplication types. The priority of the duplicate genes is as follows: WGD > tandem > proximal > transposed > dispersed.
+
+```bash
+$ perl DupGen_finder-unique.pl -i data/ -t Ath -c Nnu -o results/
+```
 
 ## Result Files
 ### 1 - Duplicated gene pairs: 
@@ -155,13 +162,17 @@ AT1G51110.1	Ath-Chr1:18935329
 
 The number of duplicated gene pairs derived from different modes.
 ```
-Absolutes	Ath
+Types	NO. of gene pairs
 WGD-pairs	4352
 TD-pairs	2064
 PD-pairs	790
 TRD-pairs	4447
-HQD-pairs	3655
+DSD-pairs	17750
 ```
 
+### 4 - Collinearity files
+- Ath.collinearity
+- Ath_Nnu.collinearity
+
 ## Citation
-The manuscript is under review.
+*Qiao X, Li Q, Yin H, Qi K, Li L, Wang R, Zhang S\* and Paterson A\*: Gene duplication and evolution in recurring polyploidization-diploidization cycles in plants. Under Review.*
