@@ -22,7 +22,7 @@ The DupGen_finder was developed to identify different modes of duplicated gene p
 ## Contents
 * [Dependencies](#dependencies)
 * [Installation](#installation)
-* [Preparing Data files](#preparing-data-files)
+* [Preparing input files](#preparing-input-files)
 * [Running](#running)
 * [Result Files](#result-files)
 * [Citation](#citation)
